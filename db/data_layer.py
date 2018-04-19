@@ -3,7 +3,6 @@ from db.entities import User
 
 db = DbManager()
 
-
 def create_user(email, name, password):
     user = User()
     user.name = name
@@ -16,5 +15,4 @@ def get_user_by_id(user_id):
 
 def get_user_by_email(email):
     return db.open().query(User).filter(User.email == email).one()
-
 
