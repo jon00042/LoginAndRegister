@@ -30,7 +30,16 @@ def register():
             is_valid = False
     if (not is_valid):
         return redirect('authenticate')
-    user = create_user(request.form['html_email'], request.form['html_username'], request.form['html_password'])
+    user = None
+    try:
+        user = create_user(request.form['html_email'], request.form['html_username'], request.form['html_password'])
+    except sqlalchemy.exc.IntegrityError:
+        pass
+    except Exception as ex:
+        print(ex)
+    if (user is None):
+        flash('email address already registered!')
+        return redirect(url_for('authenticate'))
     session['user_id'] = user.id
     session['username'] = user.name
     return redirect(url_for('index'))
